@@ -14,7 +14,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iagocarvalho.noteapproom.screens.flasCardViewModel
 import com.iagocarvalho.noteapproom.screens.flashCardScreen
 import com.iagocarvalho.noteapproom.ui.theme.NoteAppRoomTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
