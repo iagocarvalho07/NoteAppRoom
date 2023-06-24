@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iagocarvalho.noteapproom.screens.flasCardViewModel
 import com.iagocarvalho.noteapproom.screens.flashCardScreen
@@ -27,8 +29,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val flasCardViewModel: flasCardViewModel by viewModels()
-                    FlasCardApp(flasCardViewModel = flasCardViewModel)
+                    val flasCardViewModels = viewModel<flasCardViewModel>()
+                    //val flasCardViewModel: flasCardViewModel by viewModels()
+                    FlasCardApp(flasCardViewModel = flasCardViewModels)
                 }
             }
         }
@@ -36,11 +39,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun FlasCardApp(flasCardViewModel: flasCardViewModel = viewModel()) {
-    val flascarList = flasCardViewModel.getAllNotes()
+fun FlasCardApp(flasCardViewModel: flasCardViewModel) {
+    val flascarList = flasCardViewModel.flasCardList.collectAsState().value
 
     flashCardScreen(
-        flasCards = flascarList, addFlasCard = { flasCardViewModel.addFlasCard(it) },
+        flasCards = flascarList,
+        addFlasCard = { flasCardViewModel.addFlasCard(it) },
         removeFlasCard = { flasCardViewModel.removeflasCard(it) })
 }
 

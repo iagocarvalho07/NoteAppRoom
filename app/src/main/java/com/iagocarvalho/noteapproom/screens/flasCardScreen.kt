@@ -2,13 +2,24 @@ package com.iagocarvalho.noteapproom.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -75,9 +86,9 @@ fun flashCardScreen(
                 label = "Pergunta",
                 maxline = 1,
                 OntextChange = {
-                    if (it.all {  char ->
+                    if (it.all { char ->
                             char.isLetter() || char.isWhitespace()
-                        })pergunta = it
+                        }) pergunta = it
                 })
             FlasCardTextFild(
                 modifier = Modifier.padding(top = 9.dp, bottom = 8.dp),
@@ -85,13 +96,13 @@ fun flashCardScreen(
                 label = "Resposta",
                 maxline = 1,
                 OntextChange = {
-                    if (it.all {  char ->
+                    if (it.all { char ->
                             char.isLetter() || char.isWhitespace()
-                        })resposta = it
+                        }) resposta = it
                 })
             FlasCardButton(text = "Save", onClick = {
-                if (resposta.isNotEmpty() && pergunta.isNotEmpty()){
-                    addFlasCard(FlasCard(pergunta = pergunta, resposta= resposta))
+                if (resposta.isNotEmpty() && pergunta.isNotEmpty()) {
+                    addFlasCard(FlasCard(pergunta = pergunta, resposta = resposta))
                     //salvar ou add a list
                     pergunta = ""
                     resposta = ""
@@ -100,7 +111,7 @@ fun flashCardScreen(
             })
         }
         Divider(modifier = Modifier.padding(10.dp))
-        LazyColumn{
+        LazyColumn {
             items(flasCards) { card ->
                 FlasCardRow(flascard = card, onFlasCardClicked = {
                     removeFlasCard(card)
@@ -114,31 +125,53 @@ fun flashCardScreen(
 fun FlasCardRow(
     modifier: Modifier = Modifier,
     flascard: FlasCard,
-    onFlasCardClicked: (FlasCard)-> Unit
-){
-    Surface(modifier = Modifier
-        .padding(4.dp)
-        .clip(
-            RoundedCornerShape(
-                topEnd = 33.dp,
-                bottomStart = 33.dp
+    onFlasCardClicked: (FlasCard) -> Unit
+) {
+    var expanded = remember {
+        mutableStateOf(false)
+    }
+    Surface(
+        modifier = Modifier
+            .padding(4.dp)
+            .clip(
+                RoundedCornerShape(
+                    topEnd = 33.dp,
+                    bottomStart = 33.dp
+                )
             )
-        )
-        .fillMaxWidth(),
-        color = Color.Magenta,
+            .fillMaxWidth(),
+        color = Color.LightGray,
         shadowElevation = 6.dp
     ) {
-        Column(
-            modifier
-                .clickable {onFlasCardClicked(flascard) }
-                .padding(
-                    horizontal = 15.dp,
-                    vertical = 6.dp
-                ),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(text = flascard.pergunta, style = MaterialTheme.typography.bodyMedium)
-            Text(text = flascard.resposta, style = MaterialTheme.typography.bodyMedium)
+        Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+            Column(
+                modifier
+                    .clickable { }
+                    .padding(
+                        horizontal = 15.dp,
+                        vertical = 6.dp
+                    )
+                    .weight(1f),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(text = flascard.pergunta, style = MaterialTheme.typography.bodyMedium)
+                if (expanded.value)Text(text = flascard.resposta, style = MaterialTheme.typography.bodyMedium)
+
+
+            }
+            Icon(
+                imageVector =
+                if (expanded.value) {
+                    Icons.Default.KeyboardArrowUp
+                } else {
+                    Icons.Default.KeyboardArrowDown
+                }, contentDescription = "",
+                modifier.clickable { expanded.value = !expanded.value }
+            )
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "",
+                modifier.clickable { onFlasCardClicked(flascard) })
 
 
         }
@@ -151,5 +184,8 @@ fun FlasCardRow(
 @Preview(showBackground = true)
 @Composable
 fun FlashCardScreenPreview() {
-    flashCardScreen(flasCards =flasCardDataSource().loadflasCards(), addFlasCard = {}, removeFlasCard ={} )
+    flashCardScreen(
+        flasCards = flasCardDataSource().loadflasCards(),
+        addFlasCard = {},
+        removeFlasCard = {})
 }

@@ -29,7 +29,7 @@ fun FlasCardTextFild(
     val keybordControl = LocalSoftwareKeyboardController.current
     TextField(
         value = text,
-        colors = TextFieldDefaults.outlinedTextFieldColors(Color.LightGray),
+        colors = TextFieldDefaults.outlinedTextFieldColors(Color.Black),
         onValueChange = OntextChange,
         maxLines = maxline,
         label = { Text(text = label) },
