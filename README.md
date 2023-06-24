@@ -1,6 +1,4 @@
 # NoteAppRoom
- 
-# Nome do seu aplicativo
 
 Projeto Android que demonstra o uso do Room e Hilt.
 
