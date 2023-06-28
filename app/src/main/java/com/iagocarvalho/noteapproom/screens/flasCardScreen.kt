@@ -156,8 +156,6 @@ fun FlasCardRow(
             ) {
                 Text(text = flascard.pergunta, style = MaterialTheme.typography.bodyMedium)
                 if (expanded.value)Text(text = flascard.resposta, style = MaterialTheme.typography.bodyMedium)
-
-
             }
             Icon(
                 imageVector =
